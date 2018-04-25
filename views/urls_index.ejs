@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>TinyApp</title>
+</head>
+<body>
+  <p> Your urls</p>
+  <table style="text-align:center;" align="center"  border= "1"; bgcolor="#87CEFA">
+      <% var myKeys = Object.keys(urls) %>
+      <% myKeys.forEach(function(key){ %>
+        <tr>
+          <td><%= key + ':' %></td>
+          <td><%= urls[key] %></td>
+        </tr>
+      <%}) %>
+  <table>
+  <p align="center"> <a href="/new">Add</a> </p>
+</body>
+</html>
