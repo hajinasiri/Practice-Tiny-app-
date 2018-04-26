@@ -50,7 +50,16 @@ app.get("/urls/:id", (req, res) => {
 
 //To handle post request from the "new" page to add to the database
 app.post("/urls", (req, res) => {
-  console.log(req.body);
-  generateRandomString();
-  res.send("Ok");
+  let shortURL = generateRandomString();
+  let longURL = req.body.longURL;
+  urlDatabase.shortURL = longURL;
+  res.redirect("longURL");
+});
+
+//To redirect the shorturl to longurl
+app.get("/u/:shortURL", (req, res) => {
+  let shortURL = req.params.shortURL;
+  let longURL = urlDatabase[shortURL];
+  console.log(longURL);
+  res.redirect(longURL);
 });
