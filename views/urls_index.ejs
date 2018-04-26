@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>TinyApp</title>
+  <% include ./partials/_header.ejs %>
 </head>
 <body>
-  <p> Your urls</p>
-  <table style="text-align:center;" align="center"  border= "1"; bgcolor="#87CEFA">
+  <p> Your urls</p align="center">
+  <table  align="center"  border= "1"; style="font-size:20px; width: 300px; border-collapse:collapse "; cellpadding="20px">
       <% var myKeys = Object.keys(urls) %>
       <% myKeys.forEach(function(key){ %>
         <tr>
           <td><%= key + ':' %></td>
           <td><%= urls[key] %></td>
         </tr>
-      <%}) %>
+      <% }) %>
   <table>
-  <p align="center"> <a href="/new">Add</a> </p>
-</body>
+ <!-- Following line is the link to the page for adding new url -->
+  <p align="center"> <a href="/urls/new">Add</a> </p>
 </html>
