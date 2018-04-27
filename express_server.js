@@ -15,7 +15,7 @@ function generateRandomString() {
   while (shortString.length < 6) {
       shortString += allCharacters[Math.floor(Math.random() * allCharacters.length)];
   }
-  console.log(shortString);
+  return(shortString);
 }
 
 var urlDatabase = {
@@ -43,23 +43,42 @@ app.get("/urls/new", (req, res) => {
 });
 
 //The raute to show a single url
-app.get("/urls/:id", (req, res) => {
+app.post("/urls/:id", (req, res) => {
   let templateVars = { shortURL: req.params.id };
   res.render("urls_show", templateVars);
 });
 
 //To handle post request from the "new" page to add to the database
 app.post("/urls", (req, res) => {
-  let shortURL = generateRandomString();
+   let shortURL = generateRandomString();
   let longURL = req.body.longURL;
-  urlDatabase.shortURL = longURL;
-  res.redirect("longURL");
+  var longRes = longURL.substr(0, 11);
+  var shortRes = longURL.substr(0,4);
+  if(longRes === "http://www."){
+  }else if(shortRes === "www."){
+    longURL= "http://" + longURL;
+  }else{
+    longURL = "http://www." + longURL
+  }
+  urlDatabase[shortURL] = longURL;
+  res.redirect(longURL);
 });
 
 //To redirect the shorturl to longurl
 app.get("/u/:shortURL", (req, res) => {
   let shortURL = req.params.shortURL;
   let longURL = urlDatabase[shortURL];
-  console.log(longURL);
   res.redirect(longURL);
 });
+
+//To handle post request for deleting a url
+app.post("/urls/:id/delete", (req, res) => {
+  let shortURL = req.params.id;
+  console.log(shortURL);
+  delete urlDatabase[shortURL];
+  res.redirect("/urls");
+});
+
+
+
+
