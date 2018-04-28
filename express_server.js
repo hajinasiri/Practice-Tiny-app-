@@ -1,5 +1,7 @@
 var express = require("express");
+var cookieParser = require('cookie-parser')
 var app = express();
+app.use(cookieParser());
 var PORT = process.env.PORT || 8080; // default port 8080
 app.set("view engine", "ejs");
 
@@ -50,8 +52,8 @@ app.get("/urls/:id", (req, res) => {
 app.post("/urls", (req, res) => {
   let shortURL = generateRandomString();
   let longURL = req.body.longURL;
-  var longRes = longURL.substr(0, 11);
-  var shortRes = longURL.substr(0,4);
+  let longRes = longURL.substr(0, 11);
+  let shortRes = longURL.substr(0,4);
   if(longRes === "http://www."){
   }else if(shortRes === "www."){
     longURL= "http://" + longURL;
@@ -80,6 +82,12 @@ app.post("/urls/:id/delete", (req, res) => {
 app.post("/urls/update", (req, res) =>{
   let shortURL = req.body.shortURL;
   urlDatabase[shortURL] = req.body.longURL;
+  res.redirect("/urls");
+});
+
+//To handle login and set the cookie
+app.post("/login", (req, res) =>{
+  res.cookie('name',req.body.username);
   res.redirect("/urls");
 });
 
