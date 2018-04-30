@@ -32,7 +32,7 @@ app.listen(PORT, () => {
 
 //To show all the urls
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase };
+  let templateVars = { username: req.cookies["username"], urls: urlDatabase };
   res.render("urls_index", templateVars);
 });
 
@@ -44,7 +44,7 @@ app.get("/urls/new", (req, res) => {
 //The raute to show a single url
 app.get("/urls/:id", (req, res) => {
   let shortURL = req.params.id;
-  let templateVars = { "shortURL": req.params.id, "longURL":urlDatabase[shortURL]};
+  let templateVars = { username: req.cookies["username"], "shortURL": req.params.id, "longURL":urlDatabase[shortURL]};
   res.render("urls_show", templateVars);
 });
 
@@ -74,7 +74,7 @@ app.get("/u/:shortURL", (req, res) => {
 //To handle post request for deleting a url
 app.post("/urls/:id/delete", (req, res) => {
   let shortURL = req.params.id;
-  delete urlDatabase[shortURL];
+  let templateVars = {username: req.cookies["username"]};
   res.redirect("/urls");
 });
 
@@ -87,8 +87,14 @@ app.post("/urls/update", (req, res) =>{
 
 //To handle login and set the cookie
 app.post("/login", (req, res) =>{
-  res.cookie('name',req.body.username);
+  res.cookie('username',req.body.username);
   res.redirect("/urls");
 });
+
+app.post("/logout", (req, res) =>{
+  res.clearCookie('username');
+  res.redirect("/urls");
+});
+
 
 
