@@ -1,19 +1,21 @@
 <title>TinyApp</title style="align:center;">
 <p>TinyApp</p>
- <%if(username){%>
-  <div align="right">
-    <%=username%>
+<%console.log(user)%>
+ <%if(!user.id){%>
+  <p>
+    <a href="/login">Log in</a>
+  </p>
+  <p>
+    <a href="/register">Register</a>
+  </p>
+
+<%}else{%>
+   <div align="right">
+    <%=user.email%>
 
     <!-- logout button -->
     <form action="/logout" method="POST" >
       <input type="submit" value="logout">
     </form>
   </div>
-
-<%}else{%>
-  <form action="/login" method="POST" style="margin:150px;">
-    <label for="username">Enter your name:</label>
-    <input id="username" type="text" name="username"  style="width: 150px">
-    <input type="submit" value="Submit">
-  </form>
 <%}%>

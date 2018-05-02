@@ -1,13 +1,22 @@
 var express = require("express");
-var cookieParser = require('cookie-parser')
+var cookieParser = require('cookie-parser');
 var app = express();
 app.use(cookieParser());
+var cookieSession = require('cookie-session');
+
 var PORT = process.env.PORT || 8080; // default port 8080
 app.set("view engine", "ejs");
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
+app.use(cookieSession({
+  name: 'session',
+  keys: ["Hello"],
+
+  // Cookie Options
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+}))
 
 
 //This function generates a 6 character string
@@ -44,7 +53,14 @@ app.listen(PORT, () => {
 
 //To show all the urls
 app.get("/urls", (req, res) => {
-  let templateVars = { username: req.cookies["username"], urls: urlDatabase };
+  let user ={};
+  if(req.cookies["user_id"]){
+    let user_id = req.cookies["user_id"];
+    if(user_id in users){
+      user = users[user_id];
+    }
+  }
+  let templateVars = { user:user, urls: urlDatabase };
   res.render("urls_index", templateVars);
 });
 
@@ -56,7 +72,7 @@ app.get("/urls/new", (req, res) => {
 //The raute to show a single url
 app.get("/urls/:id", (req, res) => {
   let shortURL = req.params.id;
-  let templateVars = { username: req.cookies["username"], "shortURL": req.params.id, "longURL":urlDatabase[shortURL]};
+  let templateVars = { user_id: req.cookies["user_id"], "shortURL": req.params.id, "longURL":urlDatabase[shortURL]};
   res.render("urls_show", templateVars);
 });
 
@@ -86,7 +102,7 @@ app.get("/u/:shortURL", (req, res) => {
 //To handle post request for deleting a url
 app.post("/urls/:id/delete", (req, res) => {
   let shortURL = req.params.id;
-  let templateVars = {username: req.cookies["username"]};
+  let templateVars = {user_id: req.cookies["user_id"]};
   res.redirect("/urls");
 });
 
@@ -97,17 +113,60 @@ app.post("/urls/update", (req, res) =>{
   res.redirect("/urls");
 });
 
-//To handle login and set the cookie
-app.post("/login", (req, res) =>{
-  res.cookie('username',req.body.username);
-  res.redirect("/urls");
-});
-
 app.post("/logout", (req, res) =>{
-  res.clearCookie('username');
+  res.clearCookie('user_id');
   res.redirect("/urls");
 });
 
 app.get("/register", (req, res) => {
   res.render("register");
 });
+
+app.post("/register", (req, res) => {
+  let email = req.body.email;
+  let password = req.body.password;
+  if(req.body.email == "" || password == ""){
+    res.status(400).send({ error: "Enter a valid email and a password" });
+  }else{
+    let user_id = generateRandomString();
+    user = {
+      id: user_id,
+      email: email,
+      password: password
+    };
+    users[user_id] = user;
+    req.session.user_id = user_id;
+    templateVars = user;
+    res.redirect("/urls"),templateVars;
+  }
+});
+
+app.get("/login", (req, res) =>{
+  res.render("login");
+});
+
+//To handle login and set the cookie
+app.post("/login", (req, res) =>{
+  let userKeys = Object.keys(users);
+  let emailValidation = 0;
+  let passwordValidation = 0;
+  userKeys.forEach(function(key){
+    if(users[key].email === req.body.email){
+      emailValidation = 1;
+      if(users[key].password === req.body.password){
+        passwordValidation = 1;
+        res.cookie('user_id',users[key].id, { maxAge: 900000, httpOnly: true });
+        console.log(users[key].id)
+        res.redirect("/urls");
+      }
+    }
+  });
+  if(emailValidation === 0 || passwordValidation === 0){
+    res.status(404).send({Error:"Either the email or password or both are not correct"})
+  }
+
+});
+
+
+
+
