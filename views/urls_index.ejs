@@ -5,13 +5,11 @@
 </head>
 <body>
   <table  align="center"  border= "0"; style="font-size:20px; width: 300px; border-collapse:collapse "; cellpadding="5px">
-    <tr> Your URLs </tr>
     <% var myKeys = Object.keys(urls) %>
     <% myKeys.forEach(function(key){ %>
       <tr>
         <td style="font-size:17px"><%=key%>&#8594;</td>
-        <td style="color:blue"><%= urls[key] %></td>
-
+        <td style="color:blue"><%= urls[key].longUrl %></td>
         <td>
           <form method="POST" action="/urls/<%=key%>/delete" >
             <input type="submit" value="Delete" style="padding: 5px 10px;font-size: 12px; background-color: #D3D3D3;font-weight: bold;color: black;border-radius: 5px;-moz-border-radius: 5px;-webkit-border-radius: 5px;border: 1px solid black;cursor: pointer;box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;-moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;-webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;">
@@ -23,7 +21,7 @@
       </tr>
     <% }) %>
   <table>
- <!-- Following line is the link to the page for adding new url -->
+  <!-- Following line is the link to the page for adding new url -->
   <p align="center"> <a href="/urls/new">Add</a> </p>
   </body>
 </html>

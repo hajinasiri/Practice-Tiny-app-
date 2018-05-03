@@ -29,9 +29,32 @@ function generateRandomString() {
   return(shortString);
 }
 
+//This function set returns the approperiate user by looking at the cookie
+function setTheUser(reqCookies){
+  let user ={};
+  if(reqCookies["user_id"]){
+    let user_id = reqCookies["user_id"];
+    if(user_id in users){
+      user = users[user_id];
+    }
+  }
+  return(user);
+}
+
+function urlsForUserId(id){
+  let ufu = {};
+  let shorts = Object.keys(urlDatabase);
+  shorts.forEach(function(short){
+    if(urlDatabase[short].userID === id){
+      ufu[short] = urlDatabase[short];
+    }
+  });
+  return ufu
+}
+
 var urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "b2xVn2": {longUrl: "http://www.lighthouselabs.ca", userID: "userRandomID"},
+  "9sm5xK": {longUrl: "http://www.google.com", userID: "user2RandomID"}
 };
 
 const users = {
@@ -53,26 +76,28 @@ app.listen(PORT, () => {
 
 //To show all the urls
 app.get("/urls", (req, res) => {
-  let user ={};
-  if(req.cookies["user_id"]){
-    let user_id = req.cookies["user_id"];
-    if(user_id in users){
-      user = users[user_id];
-    }
-  }
-  let templateVars = { user:user, urls: urlDatabase };
+  let user = setTheUser(req.cookies);
+  let ufu = urlsForUserId(req.cookies["user_id"]);
+  let templateVars = { user:user, urls: ufu };
   res.render("urls_index", templateVars);
 });
 
 // To render the page for adding new urls
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  if(req.cookies["user_id"]){
+    let user = users[req.cookies["user_id"]];
+    templateVars ={user:user};
+    res.render("urls_new",templateVars);
+  }else{
+    res.redirect("/login")
+  }
 });
 
 //The raute to show a single url
 app.get("/urls/:id", (req, res) => {
   let shortURL = req.params.id;
-  let templateVars = { user_id: req.cookies["user_id"], "shortURL": req.params.id, "longURL":urlDatabase[shortURL]};
+  let user = setTheUser(req.cookies);
+  let templateVars = { user:user, "shortURL": req.params.id, "longURL":urlDatabase[shortURL].longUrl};
   res.render("urls_show", templateVars);
 });
 
@@ -82,34 +107,49 @@ app.post("/urls", (req, res) => {
   let longURL = req.body.longURL;
   let longRes = longURL.substr(0, 11);
   let shortRes = longURL.substr(0,4);
+  let user_id = req.cookies["user_id"];
   if(longRes === "http://www."){
   }else if(shortRes === "www."){
     longURL= "http://" + longURL;
   }else{
     longURL = "http://www." + longURL
   }
-  urlDatabase[shortURL] = longURL;
-  res.redirect(longURL);
+  if(req.cookies["user_id"]){
+    let user_id = req.cookies["user_id"];
+    urlDatabase[shortURL] = {longUrl:longURL, userID:user_id};
+    res.redirect(longURL);
+  }else{
+    res.redirect("/login");
+  }
 });
 
 //To redirect the shorturl to longurl
 app.get("/u/:shortURL", (req, res) => {
   let shortURL = req.params.shortURL;
-  let longURL = urlDatabase[shortURL];
+  let longURL = urlDatabase[shortURL].longUrl;
   res.redirect(longURL);
 });
 
 //To handle post request for deleting a url
 app.post("/urls/:id/delete", (req, res) => {
   let shortURL = req.params.id;
-  let templateVars = {user_id: req.cookies["user_id"]};
+  if(req.cookies["user_id"]){
+    let user_id = req.cookies["user_id"];
+    if(user_id in users && urlDatabase[shortURL].userID === user_id){
+      delete urlDatabase[shortURL];
+    }
+  }
   res.redirect("/urls");
 });
 
 //To handle the request from urls_show.ejs to update the url
 app.post("/urls/update", (req, res) =>{
   let shortURL = req.body.shortURL;
-  urlDatabase[shortURL] = req.body.longURL;
+  if(req.cookies["user_id"]){
+    if(req.cookies["user_id"] === urlDatabase[shortURL].userID){
+      urlDatabase[shortURL].longUrl = req.body.longURL;
+    }
+  }
   res.redirect("/urls");
 });
 
@@ -142,7 +182,11 @@ app.post("/register", (req, res) => {
 });
 
 app.get("/login", (req, res) =>{
-  res.render("login");
+  if(req.cookies["user_id"]){
+    res.redirect("/urls");
+  }else{
+    res.render("login");
+  }
 });
 
 //To handle login and set the cookie
@@ -156,7 +200,6 @@ app.post("/login", (req, res) =>{
       if(users[key].password === req.body.password){
         passwordValidation = 1;
         res.cookie('user_id',users[key].id, { maxAge: 900000, httpOnly: true });
-        console.log(users[key].id)
         res.redirect("/urls");
       }
     }
