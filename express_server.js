@@ -3,7 +3,7 @@ var cookieParser = require('cookie-parser');
 var app = express();
 app.use(cookieParser());
 var cookieSession = require('cookie-session');
-
+const bcrypt = require('bcryptjs');
 var PORT = process.env.PORT || 8080; // default port 8080
 app.set("view engine", "ejs");
 
@@ -169,13 +169,14 @@ app.post("/register", (req, res) => {
     res.status(400).send({ error: "Enter a valid email and a password" });
   }else{
     let user_id = generateRandomString();
+    let password = bcrypt.hashSync(req.body.password, 10);
     user = {
       id: user_id,
       email: email,
       password: password
     };
     users[user_id] = user;
-    req.session.user_id = user_id;
+    res.cookie('user_id',user_id, { maxAge: 900000, httpOnly: true });
     templateVars = user;
     res.redirect("/urls"),templateVars;
   }
@@ -194,10 +195,11 @@ app.post("/login", (req, res) =>{
   let userKeys = Object.keys(users);
   let emailValidation = 0;
   let passwordValidation = 0;
+  let password = req.body.password;
   userKeys.forEach(function(key){
     if(users[key].email === req.body.email){
       emailValidation = 1;
-      if(users[key].password === req.body.password){
+      if(bcrypt.compareSync(password,users[key].password)){
         passwordValidation = 1;
         res.cookie('user_id',users[key].id, { maxAge: 900000, httpOnly: true });
         res.redirect("/urls");
@@ -209,6 +211,9 @@ app.post("/login", (req, res) =>{
   }
 
 });
+
+
+
 
 
 
