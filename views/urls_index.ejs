@@ -22,7 +22,10 @@
     <% }) %>
   <table>
   <!-- Following line is the link to the page for adding new url -->
-  <p align="center"> <a href="/urls/new">Add</a> </p>
+  <%if (user.id){%>
+    <p align="center"> <a href="/urls/new">Add a new url</a> </p>
+  <%}%>
+
   </body>
 </html>
 
