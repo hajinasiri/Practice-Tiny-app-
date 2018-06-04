@@ -1,6 +1,9 @@
-var express = require("express");
+var app_modules = require('./app_modules/app_modules.js')
+var express = require('express');
 var cookieParser = require('cookie-parser');
 var app = express();
+const config = require('./knexfile.js')[process.env.NODE_ENV || 'development'];
+const knex = require('knex')(config);
 app.use(cookieParser());
 var cookieSession = require('cookie-session');
 const bcrypt = require('bcryptjs');
@@ -17,6 +20,9 @@ app.use(cookieSession({
   // Cookie Options
   maxAge: 24 * 60 * 60 * 1000 // 24 hours
 }))
+
+
+
 
 
 //This function generates a 6 character string
@@ -168,16 +174,22 @@ app.post("/register", (req, res) => {
   if(req.body.email == "" || password == ""){
     res.status(400).send({ error: "Enter a valid email and a password" });
   }else{
-    let user_id = generateRandomString();
-    let password = bcrypt.hashSync(req.body.password, 10);
-    user = {
-      id: user_id,
-      email: email
-    };
-    users[user_id] = user;
-    req.session.user_id = user_id;
-    templateVars = user;
-    res.redirect("/urls"),templateVars;
+    app_modules.getUserByEmail(email).then(val => {
+      if(val.id){
+        res.status(400).send({ error: "This email is already registered" });
+      }else{
+        app_modules.insertUser(email,password).then(value => {
+          let id = value[0].id;
+          req.session.user_id = id;
+          user = {
+            id: id,
+            email: email
+          };
+          templateVars = user;
+          res.redirect("/urls"),templateVars;
+        });
+      }
+    })
   }
 });
 
