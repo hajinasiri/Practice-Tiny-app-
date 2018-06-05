@@ -171,13 +171,17 @@ app.post("/urls/:id/delete", (req, res) => {
 
 //To handle the request from urls_show.ejs to update the url
 app.post("/urls/update", (req, res) =>{
-  let shortURL = req.body.shortURL;
+  let short_url = req.body.shortURL;
+  let id = req.session.user_id;
+  let long_url = req.body.longURL;
   if(req.session.user_id){
-    if(req.session.user_id === urlDatabase[shortURL].userID){
-      urlDatabase[shortURL].longUrl = req.body.longURL;
-    }
+    getUrlByShortUrl(id,short_url,long_url).then(val => {
+      res.redirect("/urls");
+    })
+  }else{
+    re.redirect('/urls');
   }
-  res.redirect("/urls");
+
 });
 
 app.post("/logout", (req, res) =>{
@@ -235,7 +239,6 @@ app.post("/login", (req, res) =>{
         res.redirect("/urls");
       }
     }
-
     if(!validation){
       res.status(404).send({Error:"Either the email or password or both are incorrect"})
     }
