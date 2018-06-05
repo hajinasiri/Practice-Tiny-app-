@@ -3,7 +3,7 @@ const knex = require('knex')(config);
 const bcrypt = require('bcryptjs');
 
 //|===================================================
-//|users TABLE Modules
+//|users Table Modules
 //|===================================================
   const getUserByEmail= (email,cb) => {
   return new Promise (function (resolve,reject) {
@@ -72,7 +72,7 @@ const insertUrl = (short_url, long_url,id,cb) => {
   })
 }
 
-const getUrlByShortUrl = (id,short_url, long_url,cb) => {
+const updateUrl = (id,short_url, long_url,cb) => {
   return new Promise (function (resolve, reject) {
     resolve(
       knex('urls')
@@ -85,6 +85,28 @@ const getUrlByShortUrl = (id,short_url, long_url,cb) => {
   })
 }
 
+const getUrlByShort = (id,short_url,cb) => {
+  return new Promise (function (resolve, reject) {
+    resolve(
+      knex('urls')
+        .where({user_id:id, short_url:short_url})
+        .returning('long_url')
+        .asCallback({cb})
+      );
+    reject('rejected');
+  })
+}
 
+const deleteUrlByShortUrl = (id,short_url,cb) => {
+    return new Promise (function (resolve, reject) {
+    resolve(
+      knex('urls')
+        .where({user_id:id, short_url:short_url})
+        .del()
+        .asCallback({cb})
+      );
+    reject('rejected');
+  })
+}
 
-module.exports = {getUserByEmail, insertUser, getUrlsByUserId, getUserById, insertUrl, getUrlByShortUrl}
+module.exports = {getUserByEmail, insertUser, getUrlsByUserId, getUserById, insertUrl, updateUrl, getUrlByShort, deleteUrlByShortUrl}

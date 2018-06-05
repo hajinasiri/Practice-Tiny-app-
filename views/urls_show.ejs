@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+<%console.log(long_url)%>
   <head></head>
   <body style="font-size:20px; padding:50px;">
     <% include partials/_header %>
     <form action="/urls/update" method="POST" style="margin:150px;">
-      <p>Short URL : <%=shortURL%></p>
+      <p>Short URL : <%=short_url%></p>
       <label for="longURL">Edit this url</label>
-      <input type="hidden" name="shortURL" value=<%=shortURL%>>
-      <input id="longURL" type="text" name="longURL" placeholder=<%=longURL%> style="width: 300px; font-size:20px">
+      <input type="hidden" name="shortURL" value=<%=short_url%>>
+      <input id="longURL" type="text" name="longURL" placeholder=<%=long_url%> style="width: 300px; font-size:20px">
       <input type="submit" value="Update" style="font-size:70px;">
     </form>
   </body>

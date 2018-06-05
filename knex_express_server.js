@@ -122,10 +122,26 @@ app.get("/urls/new", (req, res) => {
 
 //The raute to show a single url
 app.get("/urls/:id", (req, res) => {
-  let shortURL = req.params.id;
-  let user = setTheUser(req.session);
-  let templateVars = { user:user, "shortURL": req.params.id, "longURL":urlDatabase[shortURL].longUrl};
-  res.render("urls_show", templateVars);
+  let id = req.session.user_id;
+  let short_url = req.params.id;
+  if(id){
+   Promise.all([app_modules.getUserById(id), app_modules.getUrlByShort(id,short_url)]).then(vals => {
+      let templateVars = {
+        user: {
+          id:id,
+          email: vals[0][0].email
+        },
+       short_url:short_url,
+       long_url:vals[1][0].long_url
+      }
+      res.render("urls_show", templateVars);
+    })
+  }else{
+    res.redirect('/urls')
+  }
+
+
+
 });
 
 //To handle post request from the "new" page to add to the database
@@ -159,14 +175,16 @@ app.get("/u/:shortURL", (req, res) => {
 
 //To handle post request for deleting a url
 app.post("/urls/:id/delete", (req, res) => {
-  let shortURL = req.params.id;
-  if(req.session.user_id){
-    let user_id = req.session.user_id;
-    if(user_id in users && urlDatabase[shortURL].userID === user_id){
-      delete urlDatabase[shortURL];
-    }
+  let short_url = req.params.id;
+  let id = req.session.user_id;
+  if(id){
+    app_modules.deleteUrlByShortUrl(id,short_url).then(val => {
+      res.redirect("/urls")
+    })
+  }else{
+    res.redirect("/urls");
   }
-  res.redirect("/urls");
+
 });
 
 //To handle the request from urls_show.ejs to update the url
@@ -175,7 +193,7 @@ app.post("/urls/update", (req, res) =>{
   let id = req.session.user_id;
   let long_url = req.body.longURL;
   if(req.session.user_id){
-    getUrlByShortUrl(id,short_url,long_url).then(val => {
+    app_modules.updateUrl(id,short_url,long_url).then(val => {
       res.redirect("/urls");
     })
   }else{
