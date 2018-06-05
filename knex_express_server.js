@@ -82,18 +82,34 @@ app.listen(PORT, () => {
 
 //To show all the urls
 app.get("/urls", (req, res) => {
-  let user = setTheUser(req.session);
-  let ufu = urlsForUserId(req.session.user_id);
-  let templateVars = { user:user, urls: ufu };
-  res.render("urls_index", templateVars);
+  let id = req.session.user_id;
+  Promise.all([app_modules.getUserById(id), app_modules.getUrlsByUserId(id)]).then(vals => {
+    console.log("vals= ",vals);
+    let templateVars = {
+      user: {
+        id:id,
+        email: vals[0][0].email
+      },
+      urls:vals[1]
+    }
+    res.render("urls_index", templateVars);
+  })
 });
 
 // To render the page for adding new urls
 app.get("/urls/new", (req, res) => {
   if(req.session.user_id){
-    let user = users[req.session.user_id];
-    templateVars ={user:user};
-    res.render("urls_new",templateVars);
+    let id = req.session.user_id;
+    app_modules.getUserById(id).then(val => {
+      let templateVars = {
+        user: {
+          id:id,
+          email:val[0].email
+        }
+      }
+      res.render("urls_new",templateVars);
+    })
+
   }else{
     res.redirect("/login")
   }

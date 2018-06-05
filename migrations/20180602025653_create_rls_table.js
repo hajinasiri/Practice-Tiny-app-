@@ -4,8 +4,8 @@ exports.up = function(knex, Promise) {
     table.increments();
     table.timestamps();
     table.integer('user_id').notNullable().references('id').inTable('users');
-    table.string('short-url').unique().notNullable();
-    table.string('long-url').notNullable()
+    table.string('short_url').unique().notNullable();
+    table.string('long_url').notNullable()
   })
 };
 

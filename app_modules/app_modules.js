@@ -2,6 +2,9 @@ const config = require('../knexfile.js')[process.env.NODE_ENV || 'development'];
 const knex = require('knex')(config);
 const bcrypt = require('bcryptjs');
 
+//===================================================
+//users TABLE Modules
+//===================================================
   const getUserByEmail= (email,cb) => {
   return new Promise (function (resolve,reject) {
 
@@ -28,5 +31,36 @@ const insertUser = (email, password,cb) => {
   });
 }
 
+const getUserById = (id,cb) => {
+  return new Promise (function (resolve, reject) {
+    resolve(
+      knex('users')
+        .where({id:id})
+        .returning('*')
+        .asCallback({cb})
+      );
+    reject('rejected');
+  })
+}
 
-module.exports = {getUserByEmail, insertUser}
+const getUrlsByUserId = (id,cb) => {
+  return new Promise (function (resolve, reject) {
+    resolve(
+      knex('urls')
+        .where({user_id:id})
+        .returning('*')
+        .asCallback({cb})
+      );
+    reject('rejected');
+  })
+}
+
+//===================================================
+//urls TABLE Modules
+//===================================================
+
+
+
+
+
+module.exports = {getUserByEmail, insertUser, getUrlsByUserId, getUserById}
