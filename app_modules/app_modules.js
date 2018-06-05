@@ -38,7 +38,7 @@ const getUserById = (id,cb) => {
         .where({id:id})
         .returning('*')
         .asCallback({cb})
-      );
+    );
     reject('rejected');
   })
 }
@@ -59,8 +59,18 @@ const getUrlsByUserId = (id,cb) => {
 //urls TABLE Modules
 //===================================================
 
+const insertUrl = (short_url, long_url,id,cb) => {
+  return new Promise (function (resolve,reject) {
+    resolve(
+      knex('urls')
+        .insert({user_id:id, long_url:long_url, short_url: short_url})
+        .returning('*')
+        .asCallback({cb})
+    );
+    reject('rejected');
+  })
+}
 
 
 
-
-module.exports = {getUserByEmail, insertUser, getUrlsByUserId, getUserById}
+module.exports = {getUserByEmail, insertUser, getUrlsByUserId, getUserById, insertUrl}

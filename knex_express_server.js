@@ -83,17 +83,22 @@ app.listen(PORT, () => {
 //To show all the urls
 app.get("/urls", (req, res) => {
   let id = req.session.user_id;
-  Promise.all([app_modules.getUserById(id), app_modules.getUrlsByUserId(id)]).then(vals => {
-    console.log("vals= ",vals);
-    let templateVars = {
-      user: {
-        id:id,
-        email: vals[0][0].email
-      },
-      urls:vals[1]
-    }
+  if(id){
+    Promise.all([app_modules.getUserById(id), app_modules.getUrlsByUserId(id)]).then(vals => {
+      let templateVars = {
+        user: {
+          id:id,
+          email: vals[0][0].email
+        },
+        urls:vals[1]
+      }
+      res.render("urls_index", templateVars);
+    })
+  }else{
+    let templateVars ={user:{}, urls:[]};
     res.render("urls_index", templateVars);
-  })
+  }
+
 });
 
 // To render the page for adding new urls
@@ -129,17 +134,17 @@ app.post("/urls", (req, res) => {
   let longURL = req.body.longURL;
   let longRes = longURL.substr(0, 11);
   let shortRes = longURL.substr(0,4);
-  let user_id = req.session.user_id;
+  let id = req.session.user_id;
   if(longRes === "http://www."){
   }else if(shortRes === "www."){
     longURL= "http://" + longURL;
   }else{
     longURL = "http://www." + longURL
   }
-  if(req.session.user_id){
-    let user_id = req.session.user_id;
-    urlDatabase[shortURL] = {longUrl:longURL, userID:user_id};
-    res.redirect(longURL);
+  if(id){
+    app_modules.insertUrl(shortURL,longURL,id).then(val =>
+      res.redirect(longURL)
+    );
   }else{
     res.redirect("/login");
   }
@@ -219,24 +224,22 @@ app.get("/login", (req, res) =>{
 
 //To handle login and set the cookie
 app.post("/login", (req, res) =>{
-  let userKeys = Object.keys(users);
-  let emailValidation = 0;
-  let passwordValidation = 0;
+  let email = req.body.email;
   let password = req.body.password;
-  userKeys.forEach(function(key){
-    if(users[key].email === req.body.email){
-      emailValidation = 1;
-      if(bcrypt.compareSync(password,users[key].password)){
-        passwordValidation = 1;
-        req.session.user_id = users[key].id;
+  let validation = 0;
+  app_modules.getUserByEmail(email).then(val => {
+    if(val[0]){
+      if(bcrypt.compareSync(password,val[0].password)){
+        validation =1;
+        req.session.user_id = val[0].id;
         res.redirect("/urls");
       }
     }
-  });
-  if(emailValidation === 0 || passwordValidation === 0){
-    res.status(404).send({Error:"Either the email or password or both are not correct"})
-  }
 
+    if(!validation){
+      res.status(404).send({Error:"Either the email or password or both are incorrect"})
+    }
+  })
 });
 
 
