@@ -1,7 +1,7 @@
-<title>TinyApp</title style="align:center;">
-<p>TinyApp</p>
+<title >TinyApp</title style="align:center;">
+<p class="title">TinyApp</p>
  <%if(!user.id){%>
-  <p align = "center">
+  <p class="login" align = "center">
     <a href="/login">Log in</a>
   </p>
   <p align = "center">
@@ -9,11 +9,13 @@
   </p>
 
 <%}else{%>
-   <div align="right">
-    <%=user.email%>
+   <div class="userinfo" >
+    <span class="email">
+      <%=user.email%>
+    </span>
 
     <!-- logout button -->
-    <span style= "float:right;">
+    <span class="logout">
       <form action="/logout" method="POST" >
         <input type="submit" value="logout">
       </form>

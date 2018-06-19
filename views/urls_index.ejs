@@ -5,14 +5,14 @@
   <% include ./partials/_header.ejs %>
 </head>
 <body>
-  <table  align="center"  border= "0"; style="font-size:20px; width: 300px; border-collapse:collapse "; cellpadding="5px">
+  <table class="table"  align="center"  border= "0"; style="font-size:20px; width: 300px; border-collapse:collapse "; cellpadding="5px">
     <% urls.forEach(function(element){ %>
       <tr>
         <td style="font-size:17px"><%=element.short_url%>&#8594;</td>
         <td style="color:blue"><%= element.long_url %></td>
         <td>
           <form method="POST" action="/urls/<%=element.short_url%>/delete" >
-            <input type="submit" value="Delete" style="padding: 5px 10px;font-size: 12px; background-color: #D3D3D3;font-weight: bold;color: black;border-radius: 5px;-moz-border-radius: 5px;-webkit-border-radius: 5px;border: 1px solid black;cursor: pointer;box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;-moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;-webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;">
+            <input type="submit" value="&times" >
           </form>
         </td>
         <td>
