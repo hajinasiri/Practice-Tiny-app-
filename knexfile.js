@@ -9,8 +9,7 @@ module.exports = {
       password : settings.password,
       database : settings.database,
       host     : settings.hostname,
-      port     : settings.port,
-      ssl      : settings.ssl
+      port     : settings.port
     }
   }
 };

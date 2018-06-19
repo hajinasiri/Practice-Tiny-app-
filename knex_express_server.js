@@ -13,6 +13,9 @@ app.set("view engine", "ejs");
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
 
+//To make it possible to use external css:
+app.use(express.static(__dirname + '/styles'));
+
 app.use(cookieSession({
   name: 'session',
   keys: ["Hello"],
