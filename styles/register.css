@@ -1,12 +1,10 @@
 form {
-  padding:0px;
-  margin:auto;
-  width:50%;
-  margin-top:60px;
+  margin-left:400px;
+  margin-top:50px;
 }
 
 .emailfield {
-  margin-left:34px;
+  margin-left:29px;
   font-size:20px;
   height:20px;
   width:200px;
@@ -17,19 +15,13 @@ form {
   font-size:20px;
   width:200px;
 }
-
-.loginbutton {
-  margin-left:164px;
-  font-size:20px;
-}
-
 .text {
   margin:auto;
   width:50%;
   margin-top:50px;
-
 }
 
-.register {
-  margin-left:156px;
+.submit {
+width:50%;
+margin-left:160px;
 }
