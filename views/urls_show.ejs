@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <link href="/urls_show.css" rel="stylesheet" type="text/css">
     <link href="/styles.css" rel="stylesheet" type="text/css">
     <% include partials/_header %>
   </head>
   <body>
 
-    <form action="/urls/update" method="POST" style="margin:150px;">
+    <form class="inputForm" action="/urls/update" method="POST" >
       <p>Short URL : <%=short_url%></p>
-      <label for="longURL">Edit this url</label>
+      <label>Edit this url</label>
       <input type="hidden" name="shortURL" value=<%=short_url%>>
-      <input id="longURL" type="text" name="longURL" placeholder=<%=long_url%> style="width: 300px; font-size:20px">
-      <input type="submit" value="Update" style="font-size:70px;">
+      <input id="longURL" type="text" name="longURL" placeholder=<%=long_url%> >
+      <input class="submitForm" type="submit" value="Update" >
     </form>
   </body>
 </html>

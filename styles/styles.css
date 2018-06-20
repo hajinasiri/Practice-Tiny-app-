@@ -4,9 +4,7 @@ body {
  margin:0px;
  padding:0px;
 }
-html{
 
-}
 /*partials CSS*/
 .title {
   background-color:#132bd6;
@@ -26,18 +24,10 @@ html{
   float:right;
 }
 
-
-
 .userinfo {
   float:right;
 }
 
 .login {
   text-align:center;
-}
-#wrapper {
-  max-width: 940px;
-  margin: 0 auto;
-  padding: 0 5%;
-  clear: both;
 }

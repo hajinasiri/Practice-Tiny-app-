@@ -1,0 +1,12 @@
+.inputForm {
+ margin-left:150px;
+ margin-top:150px;
+}
+
+#longURL {
+ width: 300px;
+ font-size:20px;
+}
+.submitForm {
+  font-size:50px;
+}

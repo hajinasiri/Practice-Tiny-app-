@@ -24,10 +24,6 @@ app.use(cookieSession({
   maxAge: 24 * 60 * 60 * 1000 // 24 hours
 }))
 
-
-
-
-
 //This function generates a 6 character string
 function generateRandomString() {
   var shortString = "";
@@ -38,46 +34,19 @@ function generateRandomString() {
   return(shortString);
 }
 
-//This function set returns the approperiate user by looking at the cookie
-function setTheUser(reqSession){
-  let user ={};
-  if(reqSession.user_id){
-    let user_id = reqSession.user_id;
-    if(user_id in users){
-      user = users[user_id];
-    }
+//this function makes the entered url contain http:// in the begingin
+function fixUrl (longURL) {
+  let longRes = longURL.substr(0, 11);
+  let shortRes = longURL.substr(0,4);
+  if(longRes === "http://www."){
+  }else if(shortRes === "www."){
+    longURL= "http://" + longURL;
+  }else{
+    longURL = "http://www." + longURL
   }
-  return(user);
+  return longURL
 }
 
-function urlsForUserId(id){
-  let ufu = {};
-  let shorts = Object.keys(urlDatabase);
-  shorts.forEach(function(short){
-    if(urlDatabase[short].userID === id){
-      ufu[short] = urlDatabase[short];
-    }
-  });
-  return ufu
-}
-
-var urlDatabase = {
-  "b2xVn2": {longUrl: "http://www.lighthouselabs.ca", userID: "userRandomID"},
-  "9sm5xK": {longUrl: "http://www.google.com", userID: "user2RandomID"}
-};
-
-const users = {
-  "userRandomID": {
-    id: "userRandomID",
-    email: "user@example.com",
-    password: "purple-monkey-dinosaur"
-  },
- "user2RandomID": {
-    id: "user2RandomID",
-    email: "user2@example.com",
-    password: "dishwasher-funk"
-  }
-}
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
@@ -142,24 +111,15 @@ app.get("/urls/:id", (req, res) => {
   }else{
     res.redirect('/urls')
   }
-
-
-
 });
 
 //To handle post request from the "new" page to add to the database
 app.post("/urls", (req, res) => {
   let shortURL = generateRandomString();
   let longURL = req.body.longURL;
-  let longRes = longURL.substr(0, 11);
-  let shortRes = longURL.substr(0,4);
+  longURL = fixUrl(longURL);
   let id = req.session.user_id;
-  if(longRes === "http://www."){
-  }else if(shortRes === "www."){
-    longURL= "http://" + longURL;
-  }else{
-    longURL = "http://www." + longURL
-  }
+
   if(id){
     app_modules.insertUrl(shortURL,longURL,id).then(val =>
       res.redirect(longURL)
@@ -195,6 +155,7 @@ app.post("/urls/update", (req, res) =>{
   let short_url = req.body.shortURL;
   let id = req.session.user_id;
   let long_url = req.body.longURL;
+  long_url = fixUrl(long_url);
   if(req.session.user_id){
     app_modules.updateUrl(id,short_url,long_url).then(val => {
       res.redirect("/urls");
