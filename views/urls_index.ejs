@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<!-- <html lang="en"> -->
+<html lang="en">
 <head>
   <link href="/urls_index.css" rel="stylesheet" type="text/css">
   <link href="/styles.css" rel="stylesheet" type="text/css">
   <% include ./partials/_header.ejs %>
 </head>
 <body>
-  <table class="table"  align="center"  border= "0"; style="font-size:20px; width: 300px; border-collapse:collapse "; cellpadding="5px">
+  <table class="table"  align="center"  border= "0"; >
     <% urls.forEach(function(element){ %>
       <tr>
-        <td style="font-size:17px"><%=element.short_url%>&#8594;</td>
-        <td style="color:blue"><%= element.long_url %></td>
+        <td class="shorturl"><%=element.short_url%>&#8594;</td>
+        <td class="longurl" ><%= element.long_url %></td>
         <td>
           <form method="POST" action="/urls/<%=element.short_url%>/delete" >
             <input type="submit" value="&times" >

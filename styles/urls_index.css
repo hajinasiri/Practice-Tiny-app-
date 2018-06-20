@@ -1,6 +1,8 @@
 .table {
   display:block;
   padding-top:100px;
+  width: 300px;
+  border-collapse:collapse;
 }
 
 .table input {
@@ -22,4 +24,12 @@
 .table a {
   color:black;
   font-size: .9em;
+}
+
+.longurl {
+color:blue;
+}
+
+.shorturl {
+  font-size:17px;
 }

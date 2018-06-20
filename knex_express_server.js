@@ -47,7 +47,6 @@ function fixUrl (longURL) {
   return longURL
 }
 
-
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
