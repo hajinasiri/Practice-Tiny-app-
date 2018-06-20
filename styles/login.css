@@ -5,18 +5,17 @@ form {
   margin-top:60px;
 }
 
-.email {
+.emailfield {
   margin-left:34px;
-  height:13px;
   font-size:20px;
-  width:170px;
+  height:20px;
+  width:200px;
 }
 
 .password {
-  font-size:20px;
   height:20px;
   font-size:20px;
-  width:178px;
+  width:200px;
 }
 
 .login {
@@ -27,6 +26,7 @@ form {
   margin:auto;
   width:50%;
   margin-top:50px;
+
 }
 
 .register {
