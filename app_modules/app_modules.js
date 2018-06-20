@@ -98,6 +98,19 @@ const getUrlByShort = (id,short_url,cb) => {
   })
 }
 
+// to get the long url just to redirect
+const getLongByShort = (short_url,cb) => {
+   return new Promise (function (resolve, reject) {
+    resolve(
+      knex('urls')
+        .where({short_url:short_url})
+        .returning('long_url')
+        .asCallback({cb})
+      );
+    reject('rejected');
+  })
+}
+
 const deleteUrlByShortUrl = (id,short_url,cb) => {
     return new Promise (function (resolve, reject) {
     resolve(
@@ -110,4 +123,4 @@ const deleteUrlByShortUrl = (id,short_url,cb) => {
   })
 }
 
-module.exports = {getUserByEmail, insertUser, getUrlsByUserId, getUserById, insertUrl, updateUrl, getUrlByShort, deleteUrlByShortUrl}
+module.exports = {getUserByEmail, insertUser, getUrlsByUserId, getUserById, insertUrl, updateUrl, getUrlByShort, deleteUrlByShortUrl, getLongByShort}

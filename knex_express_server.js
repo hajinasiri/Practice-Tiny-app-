@@ -131,8 +131,10 @@ app.post("/urls", (req, res) => {
 //To redirect the shorturl to longurl
 app.get("/u/:shortURL", (req, res) => {
   let shortURL = req.params.shortURL;
-  let longURL = urlDatabase[shortURL].longUrl;
-  res.redirect(longURL);
+  app_modules.getLongByShort(shortURL).then(val =>{
+    let long_url = val[0].long_url;
+    res.redirect(long_url)
+  })
 });
 
 //To handle post request for deleting a url
