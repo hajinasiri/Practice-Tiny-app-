@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<%console.log(long_url)%>
-  <head></head>
-  <body style="font-size:20px; padding:50px;">
+  <head>
+    <link href="/styles.css" rel="stylesheet" type="text/css">
     <% include partials/_header %>
+  </head>
+  <body style="font-size:20px; padding:50px;">
+
     <form action="/urls/update" method="POST" style="margin:150px;">
       <p>Short URL : <%=short_url%></p>
       <label for="longURL">Edit this url</label>
