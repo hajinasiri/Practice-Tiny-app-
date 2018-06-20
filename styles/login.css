@@ -1,0 +1,34 @@
+form {
+  padding:0px;
+  margin:auto;
+  width:50%;
+  margin-top:60px;
+}
+
+.email {
+  margin-left:34px;
+  height:13px;
+  font-size:20px;
+  width:170px;
+}
+
+.password {
+  font-size:20px;
+  height:20px;
+  font-size:20px;
+  width:178px;
+}
+
+.login {
+  margin-left:150px;
+}
+
+.text {
+  margin:auto;
+  width:50%;
+  margin-top:50px;
+}
+
+.register {
+  margin-left:142px;
+}
