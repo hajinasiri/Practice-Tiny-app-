@@ -12,7 +12,7 @@
         <td class="shorturl"><%=element.short_url%>&#8594;</td>
         <td class="longurl" ><%= element.long_url %></td>
         <td>
-          <form method="POST" action="/urls/<%=element.short_url%>/delete" >
+          <form class="delete" method="POST" action="/urls/<%=element.short_url%>/delete" >
             <input type="submit" value="&times" >
           </form>
         </td>
