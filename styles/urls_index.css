@@ -1,0 +1,25 @@
+.table {
+  display:block;
+  padding-top:30px;
+}
+
+.table input {
+  padding: 1px 4px;
+  font-size: 12px;
+  background-color: white;
+  font-weight: bold;
+  color: red;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border: 1px solid black;
+  cursor: pointer;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+  -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+  -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+}
+
+.table a {
+  color:black;
+  font-size: .9em;
+}

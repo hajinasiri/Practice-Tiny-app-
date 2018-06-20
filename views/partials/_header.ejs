@@ -1,13 +1,15 @@
-<title >TinyApp</title style="align:center;">
+<!DOCTYPE html>
+<title >TinyApp</title>
 <p class="title">TinyApp</p>
  <%if(!user.id){%>
-  <p class="login" align = "center">
-    <a href="/login">Log in</a>
-  </p>
-  <p align = "center">
-    <a href="/register">Register</a>
-  </p>
-
+   <div class="login">
+    <p>
+      <a href="/login">Log in</a>
+    </p>
+    <p>
+      <a href="/register">Register</a>
+    </p>
+  </div>
 <%}else{%>
    <div class="userinfo" >
     <span class="email">

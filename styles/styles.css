@@ -1,39 +1,20 @@
 body {
+  font-size:20px;
+ clear:both;
+ margin:0px;
+ padding:0px;
 }
+html{
 
+}
+/*partials CSS*/
 .title {
   background-color:#132bd6;
   font-size: 2em;
   padding:.5em;
   color:white;
   text-shadow: 2px 2px black;
-}
-
-
-.table {
-  display:block;
-  padding-top:30px;
-}
-
-.table input {
-  padding: 1px 4px;
-  font-size: 12px;
-  background-color: white;
-  font-weight: bold;
-  color: red;
-  border-radius: 5px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border: 1px solid black;
-  cursor: pointer;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
-  -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
-  -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
-}
-
-.table a {
-  color:black;
-  font-size: .9em;
+  margin:0px;
 }
 
 .email {
@@ -51,3 +32,12 @@ body {
   float:right;
 }
 
+.login {
+  text-align:center;
+}
+#wrapper {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 0 5%;
+  clear: both;
+}
