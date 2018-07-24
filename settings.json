@@ -4,5 +4,5 @@
   "database": "tiny_app",
   "hostname": "localhost",
   "port": 5432,
-  "ssl": true
+  "ssl": true,
 }
