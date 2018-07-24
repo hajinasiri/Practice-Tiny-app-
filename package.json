@@ -1,0 +1,34 @@
+{
+  "name": "ls",
+  "version": "1.0.0",
+  "description": "TinyApp is a full stack web application that lets the users register and get a short url for any url they give the app. This app is built with Node, Express, and used PostgreSQL database language.",
+  "main": "knex_express_server.js",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "cookie-session": "^2.0.0-beta.3",
+    "ejs": "^2.5.9",
+    "ejs-lint": "^0.3.0",
+    "express": "^4.16.3",
+    "knex": "^0.15.0",
+    "nodeman": "^1.1.2",
+    "nodemon": "^1.18.1",
+    "pg": "^7.4.3",
+    "yargs-parser": "^5.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hajinasiri/Practice-Tiny-app-.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hajinasiri/Practice-Tiny-app-/issues"
+  },
+  "homepage": "https://github.com/hajinasiri/Practice-Tiny-app-#readme"
+}

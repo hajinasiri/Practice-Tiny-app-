@@ -19,16 +19,12 @@ const bcrypt = require('bcryptjs');
 }
 
 const insertUser = (email, password,cb) => {
-  return new Promise (function (resolve,reject) {
-    let passwordHash = bcrypt.hashSync(password, 10);
-    resolve(
-          knex('users')
-      .insert({email, password: passwordHash})
-      .returning('*')
-      .asCallback({cb})
-      );
-    reject("rejected");
-  });
+  return bcrypt.hash(password, 10)
+    .then((passwordHash) => {
+      return knex('users')
+        .insert({email, password: passwordHash})
+        .returning('*')
+    })
 }
 
 const getUserById = (id,cb) => {
